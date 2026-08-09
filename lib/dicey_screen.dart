@@ -12,7 +12,7 @@ class DiceyScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 120, 0, 0),
         centerTitle: true,
-        title: Text('DICEY', style: GoogleFonts.coiny()),
+        title: Text('DICEY', style: GoogleFonts.coiny(fontSize: 35)),
       ),
       body: Center(
         child: Padding(
