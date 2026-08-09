@@ -15,12 +15,16 @@ class DiceyScreen extends StatelessWidget {
         title: Text('DICEY', style: GoogleFonts.coiny()),
       ),
       body: Center(
-        child: Row(
-          mainAxisAlignment: .spaceAround,
-          children: [
-            DiceWidget(side: DiceSides.five),
-            DiceWidget(side: DiceSides.six),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisAlignment: .center,
+            spacing: 40,
+            children: [
+              Flexible(child: DiceWidget(side: DiceSides.five)),
+              Flexible(child: DiceWidget(side: DiceSides.six)),
+            ],
+          ),
         ),
       ),
     );

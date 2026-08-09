@@ -60,16 +60,19 @@ class DiceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Padding(
-        padding: EdgeInsetsGeometry.all(30),
-        child: dice[side.index],
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(30),
+          child: dice[side.index],
+        ),
       ),
     );
   }
