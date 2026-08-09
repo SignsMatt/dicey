@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 enum DiceSides { one, two, three, four, five, six }
@@ -53,25 +55,43 @@ List<Widget> dice = [
   ),
 ];
 
-class DiceWidget extends StatelessWidget {
-  const DiceWidget({required this.side, super.key});
+class DiceWidget extends StatefulWidget {
+  const DiceWidget({super.key});
 
-  final DiceSides side;
+  @override
+  State<DiceWidget> createState() => _DiceWidgetState();
+}
+
+class _DiceWidgetState extends State<DiceWidget> {
+  late DiceSides side = rollDie();
+
+  DiceSides rollDie() {
+    return DiceSides.values[Random().nextInt(6)];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: Container(
-        width: 200,
-        height: 200,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(30),
-          child: dice[side.index],
+    return Flexible(
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              side = rollDie();
+            });
+          },
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(30),
+              child: dice[side.index],
+            ),
+          ),
         ),
       ),
     );

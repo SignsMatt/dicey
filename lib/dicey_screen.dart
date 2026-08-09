@@ -20,10 +20,7 @@ class DiceyScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: .center,
             spacing: 40,
-            children: [
-              Flexible(child: DiceWidget(side: DiceSides.five)),
-              Flexible(child: DiceWidget(side: DiceSides.six)),
-            ],
+            children: [DiceWidget(), DiceWidget()],
           ),
         ),
       ),
