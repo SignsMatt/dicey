@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shake/shake.dart';
 
 enum DiceSides { one, two, three, four, five, six }
 
@@ -64,9 +65,28 @@ class DiceWidget extends StatefulWidget {
 
 class _DiceWidgetState extends State<DiceWidget> {
   late DiceSides side = rollDie();
+  late ShakeDetector _detector;
 
   DiceSides rollDie() {
     return DiceSides.values[Random().nextInt(6)];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _detector = ShakeDetector.autoStart(
+      onPhoneShake: (event) {
+        setState(() {
+          side = rollDie();
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _detector.stopListening();
+    super.dispose();
   }
 
   @override
