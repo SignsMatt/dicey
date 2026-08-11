@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shake/shake.dart';
 
@@ -65,7 +66,7 @@ class DiceWidget extends StatefulWidget {
 
 class _DiceWidgetState extends State<DiceWidget> {
   late DiceSides side = rollDie();
-  late ShakeDetector _detector;
+  ShakeDetector? _detector;
 
   DiceSides rollDie() {
     return DiceSides.values[Random().nextInt(6)];
@@ -74,18 +75,25 @@ class _DiceWidgetState extends State<DiceWidget> {
   @override
   void initState() {
     super.initState();
-    _detector = ShakeDetector.autoStart(
-      onPhoneShake: (event) {
-        setState(() {
-          side = rollDie();
-        });
-      },
-    );
+
+    // Shake detection will throw an exception on desktop platforms.
+    // Enable it only on mobile.
+    
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android) {
+      _detector = ShakeDetector.autoStart(
+        onPhoneShake: (event) {
+          setState(() {
+            side = rollDie();
+          });
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
-    _detector.stopListening();
+    _detector?.stopListening();
     super.dispose();
   }
 
