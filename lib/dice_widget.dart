@@ -1,10 +1,5 @@
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
+import 'package:dicey/die_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shake/shake.dart';
-
-enum DiceSides { one, two, three, four, five, six }
 
 final dieDot = Container(
   width: 30,
@@ -57,68 +52,28 @@ List<Widget> dice = [
   ),
 ];
 
-class DiceWidget extends StatefulWidget {
-  const DiceWidget({super.key});
+class DiceWidget extends StatelessWidget {
+  const DiceWidget({required this.die, required this.onTap, super.key});
 
-  @override
-  State<DiceWidget> createState() => _DiceWidgetState();
-}
-
-class _DiceWidgetState extends State<DiceWidget> {
-  late DiceSides side = rollDie();
-  ShakeDetector? _detector;
-
-  DiceSides rollDie() {
-    return DiceSides.values[Random().nextInt(6)];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Shake detection will throw an exception on desktop platforms.
-    // Enable it only on mobile.
-    
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android) {
-      _detector = ShakeDetector.autoStart(
-        onPhoneShake: (event) {
-          setState(() {
-            side = rollDie();
-          });
-        },
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _detector?.stopListening();
-    super.dispose();
-  }
+  final DieModel die;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              side = rollDie();
-            });
-          },
-          child: Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Padding(
-              padding: EdgeInsetsGeometry.all(30),
-              child: dice[side.index],
-            ),
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 200,
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(30),
+            child: dice[die.side.index],
           ),
         ),
       ),
