@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:dicey/dice_widget.dart';
@@ -77,16 +78,55 @@ class _DiceyScreenState extends State<DiceyScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: SizedBox.expand(
-          child: Wrap(
-            clipBehavior: .none,
-            alignment: .center,
-            spacing: 40,
-            runSpacing: 40,
-            children: [
-              ...dice.map((x) => DiceWidget(die: x, onTap: () => rollDie(x))),
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            const spacing = 12.0;
+
+            if (dice.isEmpty) {
+              return const SizedBox();
+            }
+
+            double bestSize = 0;
+
+            // Try every possible number of columns.
+            for (int columns = 1; columns <= dice.length; columns++) {
+              final rows = (dice.length / columns).ceil();
+
+              final widthAvailable =
+                  constraints.maxWidth - (columns - 1) * spacing;
+
+              final heightAvailable =
+                  constraints.maxHeight - (rows - 1) * spacing;
+
+              final sizeFromWidth = widthAvailable / columns;
+              final sizeFromHeight = heightAvailable / rows;
+
+              final dieSize = math.min(sizeFromWidth, sizeFromHeight);
+
+              if (dieSize > bestSize) {
+                bestSize = dieSize;
+              }
+            }
+
+            if (bestSize > 200) bestSize = 200;
+
+            return Center(
+              child: Wrap(
+                alignment: .center,
+                spacing: spacing,
+                runSpacing: spacing,
+                children: [
+                  ...dice.map((die) {
+                    return SizedBox(
+                      width: bestSize,
+                      height: bestSize,
+                      child: DiceWidget(die: die, onTap: () => rollDie(die)),
+                    );
+                  }),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
